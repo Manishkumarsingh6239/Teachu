@@ -1,0 +1,21 @@
+{
+  "name": "teachu",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "npm install --prefix backend && npm install --prefix frontend && npm run build --prefix frontend",
+    "start": "node backend/src/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Manishkumarsingh6239/Teachu.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Manishkumarsingh6239/Teachu/issues"
+  },
+  "homepage": "https://github.com/Manishkumarsingh6239/Teachu#readme"
+}

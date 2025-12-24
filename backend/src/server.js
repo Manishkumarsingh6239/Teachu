@@ -1,14 +1,35 @@
 import express from "express"
 import {ENV} from "./lib/env.js"
+import path from "path"
+import { ConnectDB } from "./lib/db.js"
 
-console.log(ENV.PORT)
 
 const app = express()
 
-app.get("/", (req, res) => {
-    res.status(200).json({    })
+const __dirname = path.resolve()
+console.log(__dirname)
+
+app.get("/health", (req, res) => {
+    res.status(200).json({msg:"Health page is working"})
 })
 
-app.listen(3000, () => {
-    console.log("Server is running on port",ENV.PORT)
+if(ENV.NODE_ENV === "production"){
+    app.use(express.static(path.join(__dirname, "../frontend/dist")));
+
+    app.get("/{*any}",(req,res)=>{
+        res.sendFile(path.join(__dirname,"../frontend/dist/index.html"))
+    })
+}
+
+const StartServer = async ()=>{
+    try {
+        await ConnectDB();
+        app.listen(ENV.PORT, () => {
+        console.log("Server is running on port",ENV.PORT);
 })
+    } catch (error) {
+        console.log("💥 Error starting the server")
+    }
+}
+
+StartServer();
