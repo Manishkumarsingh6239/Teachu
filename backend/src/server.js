@@ -2,12 +2,20 @@ import express from "express"
 import {ENV} from "./lib/env.js"
 import path from "path"
 import { ConnectDB } from "./lib/db.js"
+import cors from "cors"
 
 
 const app = express()
 
 const __dirname = path.resolve()
 console.log(__dirname)
+
+//middlewares
+app.use(express.json())
+app.use(cord({
+    origin: ENV.CLIENT_URL,
+    credentials: true
+}))
 
 app.get("/health", (req, res) => {
     res.status(200).json({msg:"Health page is working"})
