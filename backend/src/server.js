@@ -12,13 +12,17 @@ console.log(__dirname)
 
 //middlewares
 app.use(express.json())
-app.use(cord({
+app.use(cors({
     origin: ENV.CLIENT_URL,
     credentials: true
 }))
 
 app.get("/health", (req, res) => {
     res.status(200).json({msg:"Health page is working"})
+})
+
+app.get("/shiva", (req, res) => {
+    res.status(200).json({msg:"Shiva is naughtty boy."})
 })
 
 if(ENV.NODE_ENV === "production"){

@@ -1,0 +1,35 @@
+import inngest from "inngest";
+import { ConnectDB } from "./db";
+import User from "../models/User.js";
+
+export const inngest = new inngest({id:"teachu"});
+
+const syncUser = inngest.createFunction(
+    {id:"sync-user"},
+    {event: "clerk/user.created"},
+    async ({event})=>{
+        await ConnectDB();
+
+        const {id,email_addresses,first_name,last_name,image_url} = event.data;
+
+        const newUser = new User({
+            clerkId:id,
+            email:email_addresses[0]?.email_address,
+            name:`${first_name || ""} ${last_name || ""}`,
+            profileImage:image_url
+        })
+
+        await User.create(newUser);
+
+    })
+
+    const deleteUserFromDB = inngest.createFunction(
+    {id:"delete-user-from-dp"},
+    {event: "clerk/user.deleted"},
+    async ({event})=>{
+        await ConnectDB();
+
+        const {id} = event.data;
+        await User.deleteOne(clerkId:id);
+
+    })
