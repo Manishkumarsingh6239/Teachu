@@ -18,5 +18,8 @@
   "bugs": {
     "url": "https://github.com/Manishkumarsingh6239/Teachu/issues"
   },
-  "homepage": "https://github.com/Manishkumarsingh6239/Teachu#readme"
+  "homepage": "https://github.com/Manishkumarsingh6239/Teachu#readme",
+  "dependencies": {
+    "stream-chat": "^9.24.0"
+  }
 }
