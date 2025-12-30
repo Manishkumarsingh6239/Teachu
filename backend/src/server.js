@@ -19,7 +19,7 @@ app.use(cors({
     credentials: true
 }))
 
-app.get("/api/inngest", serve({client: inngest, functions}))
+app.use("/api/inngest", serve({client: inngest, functions}))
 
 app.get("/health", (req, res) => {
     res.status(200).json({msg:"Health page is working"})
