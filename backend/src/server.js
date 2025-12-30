@@ -26,7 +26,7 @@ app.get("/health", (req, res) => {
 })
 
 app.get("/shiva", (req, res) => {
-    res.status(200).json({msg:"Shiva is naughtty boy."})
+    res.status(200).json({msg:"Shiva is naughtty boy.😂😂 I forgot to remove the end point 😂😂😂"})
 })
 
 if(ENV.NODE_ENV === "production"){
