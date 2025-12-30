@@ -3,7 +3,9 @@ import {ENV} from "./lib/env.js"
 import path from "path"
 import { ConnectDB } from "./lib/db.js"
 import cors from "cors"
-
+import {serve} from "inngest/express"
+import {inngest, functions} from "./lib/inngest.js"
+ 
 
 const app = express()
 
@@ -16,6 +18,8 @@ app.use(cors({
     origin: ENV.CLIENT_URL,
     credentials: true
 }))
+
+app.get("/api/inngest", serve({client: inngest, functions}))
 
 app.get("/health", (req, res) => {
     res.status(200).json({msg:"Health page is working"})
