@@ -5,7 +5,9 @@ import { ConnectDB } from "./lib/db.js"
 import cors from "cors"
 import {serve} from "inngest/express"
 import {inngest, functions} from "./lib/inngest.js"
-import {clerkMiddleware} from "@clerk/express" 
+import {clerkMiddleware} from "@clerk/express"
+import {protectRoute} from "./middleware/protectRoute.js"
+import chatRoutes from "./routes/chatRoute.js"
  
 
 const app = express()
@@ -23,9 +25,14 @@ app.use(cors({
 app.use(clerkMiddleware())
 
 app.use("/api/inngest", serve({client: inngest, functions}))
+app.use("/api/chat/",chatRoutes);
 
 app.get("/health", (req, res) => {
     res.status(200).json({msg:"Health page is working"})
+})
+
+app.get("/protected-route",protectRoute, (req, res) => {
+    res.status(200).json({msg:"API is working"})
 })
 
 app.get("/shiva", (req, res) => {
