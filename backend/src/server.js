@@ -5,6 +5,7 @@ import { ConnectDB } from "./lib/db.js"
 import cors from "cors"
 import {serve} from "inngest/express"
 import {inngest, functions} from "./lib/inngest.js"
+import {clerkMiddleware} from "@clerk/express" 
  
 
 const app = express()
@@ -18,6 +19,8 @@ app.use(cors({
     origin: ENV.CLIENT_URL,
     credentials: true
 }))
+
+app.use(clerkMiddleware())
 
 app.use("/api/inngest", serve({client: inngest, functions}))
 
