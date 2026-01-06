@@ -1,5 +1,7 @@
+import Session from "../models/Session.js";
+
 export async function createSession() {
-    try {
+  try {
     const { problem, difficulty } = req.body;
     const userId = req.user._id;
     const clerkId = req.user.clerkId;
@@ -37,6 +39,7 @@ export async function createSession() {
     res.status(500).json({ message: "Internal Server Error" });
   }
 }
+
 export async function getActiveSessions(_, res) {
   try {
     const sessions = await Session.find({ status: "active" })
@@ -51,7 +54,41 @@ export async function getActiveSessions(_, res) {
     res.status(500).json({ message: "Internal Server Error" });
   }
 }
-export async function getMyRecentSession() {}
-export async function getSessionById() {}
-export async function joinSession() {}
-export async function endSession() {}  
+
+export async function getMyRecentSession() {
+  try {
+    const userId = req.user._id;
+
+    const sessions = await Session.find({
+      status: "completed",
+      $or: [
+        { host: userId },
+        { participant: userId }
+      ]
+    }).sort({ createdAt: -1 }).limit(20)
+    res.status(200).json({ sessions })
+  } catch (error) {
+    console.log("Error in getMyRecentSession controller:", error.message);
+    res.status(500).json({ message: "Internal Server Error" })
+  }
+}
+
+export async function getSessionById() {
+  try {
+    const { id } = req.params
+    const session = await Session.findById(id)
+    .populate("host","name email profileImage clerkId")
+    .populate("partcipant", "name email profileImage clerkId")
+
+    if (!session) res.status(404).json({message:"Session not found"})
+    res.status(200).json({session})
+  }
+  catch (error) {
+    console.log("Error in getSessionById controller",error.message)
+    res.status(500).json({message:"Internal Server Error"})
+  }
+}
+
+export async function joinSession() { }
+
+export async function endSession() { }  
