@@ -1,19 +1,21 @@
+import { useUser } from '@clerk/clerk-react';
 import { useState } from 'react'
-import { SignInButton, SignedOut, SignedIn, SignOutButton, UserButton} from '@clerk/clerk-react'
+import { Toaster } from 'react-hot-toast';
+import { Routes, Route, Navigate } from 'react-router';
+import HomePage from './pages/HomePage.jsx';
+import ProblemPage from './pages/ProblemPage.jsx';
+
 
 function App() {
   const [count, setCount] = useState(0)
-
+  const {isSignedIn} = useUser()
   return (
     <>
-      <h1>Welcome to the Teachu</h1>
-      <SignedOut>
-        <SignInButton mode="modal"/>
-      </SignedOut>
-      <SignedIn>
-        <SignOutButton />
-      </SignedIn>
-      <UserButton />
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/problems" element={isSignedIn? <ProblemPage />: <Navigate to={"/"} />} />
+    </Routes>
+    <Toaster position="top-center" reverseOrder={false} />
     </>
   )
 }
