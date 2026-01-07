@@ -7,15 +7,15 @@ import ProblemPage from './pages/ProblemPage.jsx';
 
 
 function App() {
-  const [count, setCount] = useState(0)
   const {isSignedIn} = useUser()
+  console.log(isSignedIn)
   return (
     <>
-    <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/problems" element={isSignedIn? <ProblemPage />: <Navigate to={"/"} />} />
-    </Routes>
-    <Toaster position="top-center" reverseOrder={false} />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/problems" element={isSignedIn ? <ProblemPage /> : <Navigate to="/" />} />
+      </Routes>
+      <Toaster position="top-center" reverseOrder={false} />
     </>
   )
 }

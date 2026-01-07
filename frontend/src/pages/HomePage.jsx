@@ -9,7 +9,7 @@ const HomePage = () => {
         <SignInButton mode="modal" className="bg-blue-500 text-white px-4 py-2 rounded-md"/>
       </SignedOut>
       <SignedIn>
-        <SignOutButton />
+        <SignOutButton className="bg-blue-500 text-white px-4 py-2 rounded-md"/>
       </SignedIn>
       <UserButton />
     </div>
