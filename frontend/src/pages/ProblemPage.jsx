@@ -1,10 +1,11 @@
 import React from 'react'
+import Navbar from '../components/navbar'
 
 function ProblemPage() {
   console.log("problem page rendered")
   return (
     <div>
-      problemPage
+      <Navbar/>
     </div>
   )
 }
