@@ -37,10 +37,6 @@ app.get("/protected-route",protectRoute, (req, res) => {
     res.status(200).json({msg:"API is working"})
 })
 
-app.get("/shiva", (req, res) => {
-    res.status(200).json({msg:"Shiva is naughtty boy.😂😂 I forgot to remove the end point 😂😂😂"})
-})
-
 if(ENV.NODE_ENV === "production"){
     app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
