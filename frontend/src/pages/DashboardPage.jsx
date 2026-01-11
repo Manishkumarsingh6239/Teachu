@@ -4,7 +4,7 @@ import Navbar from '../components/Navbar.jsx'
 const DashboardPage = () => {
   return (
     <div>
-      <Navbar/>
+      <Navbar />
     </div>
   )
 }
