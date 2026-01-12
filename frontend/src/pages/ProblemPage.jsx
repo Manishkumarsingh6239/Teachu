@@ -1,10 +1,14 @@
 import React from 'react'
+import Navbar from '../components/Navbar'
 
 const ProblemPage = () => {
   return (
-    <div>
-      Problems Page
-    </div>
+    <>
+      <Navbar />
+      <div>
+        Problem Page
+      </div>
+    </>
   )
 }
 
