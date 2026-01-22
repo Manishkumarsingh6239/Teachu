@@ -18,8 +18,5 @@
   "bugs": {
     "url": "https://github.com/Manishkumarsingh6239/Teachu/issues"
   },
-  "homepage": "https://github.com/Manishkumarsingh6239/Teachu#readme",
-  "dependencies": {
-    "@monaco-editor/react": "^4.7.0"
-  }
+  "homepage": "https://github.com/Manishkumarsingh6239/Teachu#readme"
 }
