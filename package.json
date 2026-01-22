@@ -20,5 +20,6 @@
   },
   "homepage": "https://github.com/Manishkumarsingh6239/Teachu#readme",
   "dependencies": {
+    "@monaco-editor/react": "^4.7.0"
   }
 }

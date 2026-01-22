@@ -27,9 +27,9 @@ const ProblemPage = () => {
     }
   }, [id, selectedLanguage])
 
-  const handleLanguageChange = (e) => { }
+  const handleLanguageChange = (newLanguage) => { setSelectedLanguage(newLanguage)}
 
-  const handleProblemChange = (e) => { }
+  const handleProblemChange = (newProblemId) => {navigate(`/problem/${newProblemId}`)}
 
   const triggerConfetti = () => { }
 

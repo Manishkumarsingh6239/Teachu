@@ -53,7 +53,7 @@ function ProblemDescription({ problem, currentProblemId, onProblemChange, allPro
                   <span className="badge badge-sm">{idx + 1}</span>
                   <p className="font-semibold text-base-content">Example {idx + 1}</p>
                 </div>
-                <div className="bg-base-200 rounded-lg p-4 font-mono text-sm space-y-1.5">
+                <div className="bg-base-200 rounded-lg p-4 font-mono text-sm space-y-1.5 overflow-auto">
                   <div className="flex gap-2">
                     <span className="text-primary font-bold min-w-[70px]">Input:</span>
                     <span>{example.input}</span>
@@ -81,7 +81,7 @@ function ProblemDescription({ problem, currentProblemId, onProblemChange, allPro
           <ul className="space-y-2 text-base-content/90">
             {problem.constraints.map((constraint, idx) => (
               <li key={idx} className="flex gap-2">
-                <span className="text-primary">•</span>
+                <span className="text-primary relative bottom-0.5">•</span>
                 <code className="text-sm">{constraint}</code>
               </li>
             ))}
