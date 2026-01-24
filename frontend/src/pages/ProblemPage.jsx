@@ -1,40 +1,60 @@
-import React, { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router'
-import { PROBLEMS } from '../data/problems.js'
-import Navbar from '../components/Navbar'
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router";
+import { PROBLEMS } from "../data/problems";
+import Navbar from "../components/Navbar";
 
-import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels'
-import ProblemDescription from '../components/ProblemDescription.jsx'
-import CodeEditorPanel from '../components/CodeEditorPanel.jsx'
-import OutputPanel from '../components/OutputPanel.jsx'
-import { executeCode } from '../lib/piston.js'
+import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
+import ProblemDescription from "../components/ProblemDescription";
+import OutputPanel from "../components/OutputPanel";
+import CodeEditorPanel from "../components/CodeEditorPanel";
+import { executeCode } from "../lib/piston";
 
 import toast from "react-hot-toast";
+import confetti from "canvas-confetti";
 
-const ProblemPage = () => {
-  const { id } = useParams()
-  const navigate = useNavigate()
+function ProblemPage() {
+  const { id } = useParams();
+  const navigate = useNavigate();
 
-  const [currentProblemId, setCurrentProblemId] = useState("two-sum")
-  const [selectedLanguage, setSelectedLanguage] = useState("javascript")
-  const [code, setCode] = useState(PROBLEMS[currentProblemId].starterCode.javascript)
-  const [output, setOutput] = useState("")
-  const [isRunning, setIsRunning] = useState(false)
-  const currentProblem = PROBLEMS[currentProblemId]
+  const [currentProblemId, setCurrentProblemId] = useState("two-sum");
+  const [selectedLanguage, setSelectedLanguage] = useState("javascript");
+  const [code, setCode] = useState(PROBLEMS[currentProblemId].starterCode.javascript);
+  const [output, setOutput] = useState(null);
+  const [isRunning, setIsRunning] = useState(false);
 
+  const currentProblem = PROBLEMS[currentProblemId];
+
+  // update problem when URL param changes
   useEffect(() => {
     if (id && PROBLEMS[id]) {
-      setCurrentProblemId(id)
-      setCode(PROBLEMS[id].starterCode[selectedLanguage])
-      setOutput(null)
+      setCurrentProblemId(id);
+      setCode(PROBLEMS[id].starterCode[selectedLanguage]);
+      setOutput(null);
     }
-  }, [id, selectedLanguage])
+  }, [id, selectedLanguage]);
 
-  const handleLanguageChange = (newLanguage) => { setSelectedLanguage(newLanguage) }
+  const handleLanguageChange = (e) => {
+    const newLang = e.target.value;
+    setSelectedLanguage(newLang);
+    setCode(currentProblem.starterCode[newLang]);
+    setOutput(null);
+  };
 
-  const handleProblemChange = (newProblemId) => { navigate(`/problem/${newProblemId}`) }
+  const handleProblemChange = (newProblemId) => navigate(`/problem/${newProblemId}`);
 
-  const triggerConfetti = () => { }
+  const triggerConfetti = () => {
+    confetti({
+      particleCount: 80,
+      spread: 250,
+      origin: { x: 0.2, y: 0.6 },
+    });
+
+    confetti({
+      particleCount: 80,
+      spread: 250,
+      origin: { x: 0.8, y: 0.6 },
+    });
+  };
 
   const normalizeOutput = (output) => {
     // normalize output for comparison (trim whitespace, handle different spacing)
@@ -54,36 +74,42 @@ const ProblemPage = () => {
       .join("\n");
   };
 
-  const checkIfTestPassed = (actualOutput, expectedOutput) => {
+  const checkIfTestsPassed = (actualOutput, expectedOutput) => {
     const normalizedActual = normalizeOutput(actualOutput);
     const normalizedExpected = normalizeOutput(expectedOutput);
 
     return normalizedActual == normalizedExpected;
-  }
+  };
 
   const handleRunCode = async () => {
-    setIsRunning(true)
-    setOutput(null)
+    setIsRunning(true);
+    setOutput(null);
 
-    const result = await executeCode(selectedLanguage, code)
-    setOutput(result)
-    console.log("THE RESULT: ", result)
-    setIsRunning(false)
+    const result = await executeCode(selectedLanguage, code);
+    setOutput(result);
+    setIsRunning(false);
+
+    // check if code executed successfully and matches expected output
 
     if (result.success) {
-      const expectedOutput = currentProblem.expectedOutput[selectedLanguage]
-      const testPassed = checkIfTestPassed(result.output, expectedOutput)
+      const expectedOutput = currentProblem.expectedOutput[selectedLanguage];
+      const testsPassed = checkIfTestsPassed(result.output, expectedOutput);
 
-      if (testPassed) {
-        toast.success("Well Done!!")
+      if (testsPassed) {
+        triggerConfetti();
+        toast.success("All tests passed! Great job!");
       } else {
-        toast.error("OOPS! some error is in the code\nwe believe you can do it")
+        toast.error("Tests failed. Check your output!");
       }
+    } else {
+      toast.error("Code execution failed!");
     }
-  }
+  };
+
   return (
     <div className="h-screen bg-base-100 flex flex-col">
       <Navbar />
+
       <div className="flex-1">
         <PanelGroup direction="horizontal">
           {/* left panel- problem desc */}
@@ -125,7 +151,7 @@ const ProblemPage = () => {
         </PanelGroup>
       </div>
     </div>
-  )
+  );
 }
 
-export default ProblemPage
+export default ProblemPage;
