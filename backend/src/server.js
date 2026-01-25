@@ -29,10 +29,6 @@ app.use("/api/inngest", serve({client: inngest, functions}))
 app.use("/api/chat/",chatRoutes);
 app.use("/api/sessions", sessionRoute)
 
-app.get("/health", (req, res) => {
-    res.status(200).json({msg:"Health page is working"})
-})
-
 app.get("/protected-route",protectRoute, (req, res) => {
     res.status(200).json({msg:"API is working"})
 })

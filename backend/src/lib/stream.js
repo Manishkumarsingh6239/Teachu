@@ -9,9 +9,10 @@ const api_secret =  ENV.STREAM_API_SECRET
 if(!api_key || !api_secret){
     console.log("STREAM_API_KEY or STREAM_API_SECRET is missing");
 }
-
-export const chatClient = StreamChat.getInstance(api_key, api_secret) // for chat
-export const streamClient = new StreamClient(api_key,api_secret) //for video_calling
+//for chat
+export const chatClient = StreamChat.getInstance(api_key, api_secret)
+//for video_calling
+export const streamClient = new StreamClient(api_key,api_secret) 
 
 
 export const upsertUser = async (userData)=>{

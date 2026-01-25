@@ -1,6 +1,7 @@
+import { chatClient, streamClient } from "../lib/stream.js";
 import Session from "../models/Session.js";
 
-export async function createSession() {
+export async function createSession(req, res) {
   try {
     const { problem, difficulty } = req.body;
     const userId = req.user._id;
@@ -55,37 +56,39 @@ export async function getActiveSessions(_, res) {
   }
 }
 
-export async function getMyRecentSession() {
+export async function getMyRecentSessions(req, res) {
   try {
     const userId = req.user._id;
 
+    // get sessions where user is either host or participant
     const sessions = await Session.find({
       status: "completed",
-      $or: [
-        { host: userId },
-        { participant: userId }
-      ]
-    }).sort({ createdAt: -1 }).limit(20)
-    res.status(200).json({ sessions })
+      $or: [{ host: userId }, { participant: userId }],
+    })
+      .sort({ createdAt: -1 })
+      .limit(20);
+
+    res.status(200).json({ sessions });
   } catch (error) {
-    console.log("Error in getMyRecentSession controller:", error.message);
-    res.status(500).json({ message: "Internal Server Error" })
+    console.log("Error in getMyRecentSessions controller:", error.message);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 }
 
-export async function getSessionById() {
+export async function getSessionById(req, res) {
   try {
-    const { id } = req.params
-    const session = await Session.findById(id)
-    .populate("host","name email profileImage clerkId")
-    .populate("partcipant", "name email profileImage clerkId")
+    const { id } = req.params;
 
-    if (!session) res.status(404).json({message:"Session not found"})
-    res.status(200).json({session})
-  }
-  catch (error) {
-    console.log("Error in getSessionById controller",error.message)
-    res.status(500).json({message:"Internal Server Error"})
+    const session = await Session.findById(id)
+      .populate("host", "name email profileImage clerkId")
+      .populate("participant", "name email profileImage clerkId");
+
+    if (!session) return res.status(404).json({ message: "Session not found" });
+
+    res.status(200).json({ session });
+  } catch (error) {
+    console.log("Error in getSessionById controller:", error.message);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 }
 
@@ -158,4 +161,4 @@ export async function endSession(req, res) {
     console.log("Error in endSession controller:", error.message);
     res.status(500).json({ message: "Internal Server Error" });
   }
-} 
+}
