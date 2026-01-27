@@ -7,27 +7,27 @@ export const sessionApi = {
     },
 
     getActiveSessions: async () => {
-        const response = axiosInstance.get("/sessions/active");
+        const response = await axiosInstance.get("/sessions/active");
         return response.data;
     },
 
     getMyRecentSessions: async () => {
-        const response = axiosInstance.get("/sessions/my-recent");
+        const response = await axiosInstance.get("/sessions/my-recent");
         return response.data;
     },
 
     getSessionById: async (id) => {
-        const response = axiosInstance.get(`sessions/${id}`);
+        const response = await axiosInstance.get(`sessions/${id}`);
         return response.data;
     },
 
     joinSession: async (id) => {
-        const response = axiosInstance(`/sessions/${id}/join`);
+        const response = await axiosInstance.post(`/sessions/${id}/join`);
         return response.data;
     },
 
-    endSession: async () => {
-        const response = axiosInstance(`/sessions/${id}/end`);
+    endSession: async (id) => {
+        const response = await axiosInstance.post(`/sessions/${id}/end`);
         return response.data;
     },
 
