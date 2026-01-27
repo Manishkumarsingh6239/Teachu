@@ -32,7 +32,10 @@ function DashboardPage() {
       {
         onSuccess: (data) => {
           setShowCreateModal(false);
-          navigate(`/session/${data.session._id}`);
+          navigate(`/sessions/${data.session._id}`);
+        },
+        onError: (error) => {
+          console.error("Failed to create session:", error);
         },
       }
     );

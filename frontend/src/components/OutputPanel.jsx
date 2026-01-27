@@ -2,8 +2,8 @@ import React from 'react'
 
 function OutputPanel() {
   return (
-    <div>
-      OutputPanel
+    <div className="h-full overflow-y-auto bg-base-200">
+     
     </div>
   )
 }
