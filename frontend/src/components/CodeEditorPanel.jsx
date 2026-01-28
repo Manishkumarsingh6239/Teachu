@@ -20,7 +20,7 @@ function CodeEditorPanel({
           />
           <select className='select select-sm'
           value={selectedLanguage}
-          onChange={(e) => onLanguageChange(e.target.value)}
+          onChange={(e) => onLanguageChange(e)}
           >
             {Object.entries(LANGUAGE_CONFIG).map(([key, config]) => (
               <option key={key} value={key}>{config.name}</option>
