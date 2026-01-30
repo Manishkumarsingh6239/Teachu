@@ -15,7 +15,7 @@ export const useCreateSession = () => {
 
 export const useActiveSession = () =>{
     const result = useQuery({
-        queryKey : ["aciveSessions"],
+        queryKey : ["activeSessions"],
         queryFn : sessionApi.getActiveSessions,
     });
 
@@ -31,16 +31,16 @@ export const useMyRecentSessions = () =>{
     return result;
 };
 
-export const useSessionById = (id) =>{
-    const result = useQuery({
-        queryKey : ["myRecentSessions",id],
-        queryFn : sessionApi.getSessionById(id),
-        enabled: !!id,
-        refetchInterval: 5000,  //name itself defines
-    });
+export const useSessionById = (id) => {
+  const result = useQuery({
+    queryKey: ["session", id],
+    queryFn: () => sessionApi.getSessionById(id),
+    enabled: !!id,
+    refetchInterval: 5000, // refetch every 5 seconds to detect session status changes
+  });
 
-    return result;
-}
+  return result;
+};
 
 export const useJoinSession = () => {
   const result = useMutation({
