@@ -110,7 +110,7 @@ function ProblemPage() {
     <div className="h-screen bg-base-100 flex flex-col">
       <Navbar />
 
-      <div className="flex-1">
+      <div className="flex-1 overflow-auto">
         <PanelGroup direction="horizontal">
           {/* left panel- problem desc */}
           <Panel defaultSize={40} minSize={30}>
@@ -129,7 +129,7 @@ function ProblemPage() {
             <PanelGroup direction="vertical">
 
               {/* Top panel - Code editor */}
-              <Panel defaultSize={40} minSize={30}>
+              <Panel defaultSize={40} minSize={8}>
                 <CodeEditorPanel
                   selectedLanguage={selectedLanguage}
                   code={code}
@@ -144,7 +144,7 @@ function ProblemPage() {
 
               {/* Bottom panel - Output Panel*/}
 
-              <Panel defaultSize={30} minSize={30}>
+              <Panel defaultSize={30} minSize={5.5}>
                 <OutputPanel output={output} />
               </Panel>
             </PanelGroup>
