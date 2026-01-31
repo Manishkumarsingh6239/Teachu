@@ -11,6 +11,7 @@ import { Link } from "react-router";
 import { getDifficultyBadgeClass } from "../lib/utils";
 
 function ActiveSessions({ sessions, isLoading, isUserInSession }) {
+  console.log("SESSIONS:",sessions)
   return (
     <div className="lg:col-span-2 card bg-base-100 border-2 border-primary/20 hover:border-primary/30 h-full">
       <div className="card-body">
@@ -66,7 +67,7 @@ function ActiveSessions({ sessions, isLoading, isUserInSession }) {
                       <div className="flex items-center gap-4 text-sm opacity-80">
                         <div className="flex items-center gap-1.5">
                           <CrownIcon className="size-4" />
-                          <span className="font-medium">{session.host?.name}</span>
+                          <span className="font-medium">{session.host?.username}</span>
                         </div>
                         <div className="flex items-center gap-1.5">
                           <UsersIcon className="size-4" />

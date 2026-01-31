@@ -6,12 +6,12 @@ let client = null;
 
 export const initializeStreamClient = async (user, token) => {
   // if client exists with same user instead of creating again return it
-
-  if (client && client?.user?.id === user.id) return client;
-
   if (client) {
     await disconnectStreamClient();
   }
+
+  if (client && client?.user?.id === user.id) return client;
+
 
   if (!apiKey) throw new Error("Stream API key is not provided.");
 
