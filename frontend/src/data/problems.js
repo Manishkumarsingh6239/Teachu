@@ -65,12 +65,34 @@ class Solution {
         System.out.println(Arrays.toString(twoSum(new int[]{3, 3}, 6))); // Expected: [0, 1]
     }
 }`,
+            cpp: `#include <bits/stdc++.h>
+using namespace std;
+
+vector<int> twoSum(const vector<int>& nums, int target) {
+    // Write your solution here
+    
+    return {};
+}
+
+int main() {
+    vector<int> res1 = twoSum(vector<int>{2, 7, 11, 15}, 9);
+    cout << "[" << res1[0] << ", " << res1[1] << "]" << endl; // Expected: [0, 1]
+
+    vector<int> res2 = twoSum(vector<int>{3, 2, 4}, 6);
+    cout << "[" << res2[0] << ", " << res2[1] << "]" << endl; // Expected: [1, 2]
+
+    vector<int> res3 = twoSum(vector<int>{3, 3}, 6);
+    cout << "[" << res3[0] << ", " << res3[1] << "]" << endl; // Expected: [0, 1]
+
+    return 0;
+}`,
         },
         expectedOutput: {
             javascript: "[0,1]\n[1,2]\n[0,1]",
             python: "[0, 1]\n[1, 2]\n[0, 1]",
             java: "[0, 1]\n[1, 2]\n[0, 1]",
-        },
+            cpp: "[0, 1]\n[1, 2]\n[0, 1]",
+        }
     },
 
     "reverse-string": {
@@ -339,7 +361,7 @@ print(maxArea([1,1]))  # Expected: 1`,
             java: "49\n1",
         },
     },
-};
+}
 
 export const LANGUAGE_CONFIG = {
     javascript: {
@@ -357,4 +379,9 @@ export const LANGUAGE_CONFIG = {
         icon: "/java.png",
         monacoLang: "java",
     },
+    cpp: {
+        name: "C++",
+        icon: "/cpp.png",
+        monacoLang: "cpp",
+    }
 };

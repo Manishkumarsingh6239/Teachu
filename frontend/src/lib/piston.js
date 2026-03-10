@@ -1,11 +1,12 @@
-// Piston API is a service for code execution
+// Wandbox API for code execution (replaces Piston which now returns 401)
 
-const PISTON_API = "https://emkc.org/api/v2/piston";
+const WANDBOX_API = "https://wandbox.org/api/compile.json";
 
-const LANGUAGE_VERSIONS = {
-  javascript: { language: "javascript", version: "18.15.0" },
-  python: { language: "python", version: "3.10.0" },
-  java: { language: "java", version: "15.0.2" },
+const LANGUAGE_COMPILERS = {
+  javascript: "nodejs-20.17.0",
+  python: "cpython-3.14.0",
+  java: "openjdk-jdk-22+36",
+  cpp: "gcc-13.2.0",
 };
 
 /**
@@ -13,33 +14,31 @@ const LANGUAGE_VERSIONS = {
  * @param {string} code - source code to executed
  * @returns {Promise<{success:boolean, output?:string, error?: string}>}
  */
-
-
 export async function executeCode(language, code) {
   try {
-    const languageConfig = LANGUAGE_VERSIONS[language];
+    const compiler = LANGUAGE_COMPILERS[language];
 
-    if (!languageConfig) {
+    if (!compiler) {
       return {
         success: false,
         error: `Unsupported language: ${language}`,
       };
     }
 
-    const response = await fetch(`${PISTON_API}/execute`, {
+    // Wandbox saves Java files as prog.java, so `public class` causes an error
+    let sourceCode = code;
+    if (language === "java") {
+      sourceCode = code.replace(/public\s+class\s+/g, "class ");
+    }
+
+    const response = await fetch(WANDBOX_API, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        language: languageConfig.language,
-        version: languageConfig.version,
-        files: [
-          {
-            name: `main.${getFileExtension(language)}`,
-            content: code,
-          },
-        ],
+        code: sourceCode,
+        compiler,
       }),
     });
 
@@ -52,14 +51,23 @@ export async function executeCode(language, code) {
 
     const data = await response.json();
 
-    const output = data.run.output || "";
-    const stderr = data.run.stderr || "";
+    const compilerError = data.compiler_error || "";
+    const programError = data.program_error || "";
+    const output = data.program_output || "";
 
-    if (stderr) {
+    if (compilerError) {
       return {
         success: false,
         output: output,
-        error: stderr,
+        error: compilerError,
+      };
+    }
+
+    if (programError) {
+      return {
+        success: false,
+        output: output,
+        error: programError,
       };
     }
 
@@ -73,14 +81,4 @@ export async function executeCode(language, code) {
       error: `Failed to execute code: ${error.message}`,
     };
   }
-}
-
-function getFileExtension(language) {
-  const extensions = {
-    javascript: "js",
-    python: "py",
-    java: "java",
-  };
-
-  return extensions[language] || "txt";
 }

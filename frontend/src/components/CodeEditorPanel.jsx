@@ -47,7 +47,8 @@ function CodeEditorPanel({
       <div className="flex-1">
         <Editor 
         height="100%"
-        language={LANGUAGE_CONFIG[selectedLanguage].monacoLang}
+        // language={LANGUAGE_CONFIG[selectedLanguage].monacoLang}
+        language="cpp"
         value={code}
         onChange={onCodeChange}
         theme='vs-dark'
