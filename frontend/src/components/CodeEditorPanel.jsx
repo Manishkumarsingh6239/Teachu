@@ -27,7 +27,7 @@ function CodeEditorPanel({
             ))}
           </select>
         </div>
-        <button className='btn btn-sm btn-primary gap-2' onClick={onRunCode}>
+        <button className='btn btn-sm btn-primary gap-2' onClick={onRunCode} disabled={isRunning}>
             {isRunning ? (
               <>
                 <Loader2Icon className="size-4 animate-spin" />
