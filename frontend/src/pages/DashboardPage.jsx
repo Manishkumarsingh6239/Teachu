@@ -42,10 +42,8 @@ function DashboardPage() {
   };
 
   const activeSessions = activeSessionsData?.sessions || [];
-  console.log("activeSessions: ",activeSessions)
   
   const recentSessions = recentSessionsData?.sessions || [];
-  console.log("recentSessions: ",recentSessions)
 
   const isUserInSession = (session) => {
     if (!user.id) return false;

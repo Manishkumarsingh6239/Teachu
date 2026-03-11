@@ -63,3 +63,12 @@ export const useEndSession = () => {
 
   return result;
 };
+
+export const useLeaveSession = () => {
+  const result = useMutation({
+    mutationKey: ["leaveSession"],
+    mutationFn: sessionApi.leaveSession,
+  });
+
+  return result;
+};

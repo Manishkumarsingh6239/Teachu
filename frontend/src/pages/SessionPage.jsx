@@ -1,7 +1,8 @@
 import { useUser } from "@clerk/clerk-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { useEndSession, useJoinSession, useSessionById } from "../hooks/useSession.js";
+import { sessionApi } from "../api/sessions.js";
 import { PROBLEMS } from "../data/problems";
 import { executeCode } from "../lib/piston";
 import Navbar from "../components/Navbar";
@@ -55,6 +56,36 @@ function SessionPage() {
 
     // remove the joinSessionMutation, refetch from dependencies to avoid infinite loop
   }, [session, user, loadingSession, isHost, isParticipant, id]);
+
+  // refs to track latest state for cleanup without re-triggering the effect
+  const sessionRef = useRef(session);
+  const isHostRef = useRef(isHost);
+  const isParticipantRef = useRef(isParticipant);
+
+  useEffect(() => {
+    sessionRef.current = session;
+    isHostRef.current = isHost;
+    isParticipantRef.current = isParticipant;
+  });
+
+  // leave session on unmount or browser close
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      if (!sessionRef.current || sessionRef.current.status !== "active") return;
+      if (!isHostRef.current && !isParticipantRef.current) return;
+      const apiBase = import.meta.env.VITE_API_URL || '/api';
+      navigator.sendBeacon(`${apiBase}/sessions/${id}/leave`);
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+      if (sessionRef.current?.status === "active" && (isHostRef.current || isParticipantRef.current)) {
+        sessionApi.leaveSession(id).catch(() => {});
+      }
+    };
+  }, [id]);
 
   // redirect the "participant" when session ends
   useEffect(() => {

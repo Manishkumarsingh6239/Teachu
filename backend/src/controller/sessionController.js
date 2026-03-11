@@ -162,3 +162,55 @@ export async function endSession(req, res) {
     res.status(500).json({ message: "Internal Server Error" });
   }
 }
+
+export async function leaveSession(req, res) {
+  try {
+    const { id } = req.params;
+    const userId = req.user._id;
+
+    const session = await Session.findById(id);
+
+    if (!session) return res.status(404).json({ message: "Session not found" });
+
+    if (session.status === "completed") {
+      return res.status(400).json({ message: "Session is already completed" });
+    }
+
+    const isHost = session.host.toString() === userId.toString();
+    const isParticipant = session.participant?.toString() === userId.toString();
+
+    if (!isHost && !isParticipant) {
+      return res.status(403).json({ message: "You are not part of this session" });
+    }
+
+    if (isHost) {
+      if (session.participant) {
+        // transfer host to participant
+        session.host = session.participant;
+        session.participant = null;
+        await session.save();
+        return res.status(200).json({ session, message: "Host transferred to participant" });
+      } else {
+        // no one left, end the session
+        const call = streamClient.video.call("default", session.callId);
+        await call.delete({ hard: true });
+
+        const channel = chatClient.channel("messaging", session.callId);
+        await channel.delete();
+
+        session.status = "completed";
+        await session.save();
+        return res.status(200).json({ session, message: "Session ended, no participants left" });
+      }
+    }
+
+    if (isParticipant) {
+      session.participant = null;
+      await session.save();
+      return res.status(200).json({ session, message: "Left session successfully" });
+    }
+  } catch (error) {
+    console.log("Error in leaveSession controller:", error.message);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+}
