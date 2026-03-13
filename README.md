@@ -1,6 +1,18 @@
 <h1 align="center">✨ Full-Stack Interview Platform ✨</h1>
 
-![Demo App](/frontend/public/screenshot-for-readme.png)
+<p align="center">
+  <img src="frontend/public/Entry_page.png" height="250">
+  <img src="frontend/public/Main_page.png" height="250">
+  <img src="frontend/public/problems_page.png" height="250">
+</p>
+
+<h2 align="center">🚀 Live Demo</h2>
+
+<p align="center">
+  <a href="https://teachu-0r83.onrender.com">
+    <b>Click here to try the platform</b>
+  </a>
+</p>
 
 ✨ Highlights:
 
