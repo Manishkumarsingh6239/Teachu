@@ -184,30 +184,19 @@ export async function leaveSession(req, res) {
     }
 
     if (isHost) {
-      if (session.participant) {
-        // transfer host to participant
-        session.host = session.participant;
-        session.participant = null;
-        await session.save();
-        return res.status(200).json({ session, message: "Host transferred to participant" });
-      } else {
-        // no one left, end the session
-        const call = streamClient.video.call("default", session.callId);
-        await call.delete({ hard: true });
+      const call = streamClient.video.call("default", session.callId);
+      await call.delete({ hard: true });
 
-        const channel = chatClient.channel("messaging", session.callId);
-        await channel.delete();
+      const channel = chatClient.channel("messaging", session.callId);
+      await channel.delete();
 
-        session.status = "completed";
-        await session.save();
-        return res.status(200).json({ session, message: "Session ended, no participants left" });
-      }
-    }
-
-    if (isParticipant) {
-      session.participant = null;
+      session.status = "completed";
       await session.save();
-      return res.status(200).json({ session, message: "Left session successfully" });
+
+      return res.status(200).json({
+        session,
+        message: "Session ended because the host left",
+      });
     }
   } catch (error) {
     console.log("Error in leaveSession controller:", error.message);
